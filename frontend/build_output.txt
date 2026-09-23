@@ -1,0 +1,10 @@
+﻿
+> frontend@0.1.0 build
+> next build
+
+Γû▓ Next.js 16.1.2 (Turbopack)
+- Environments: .env.local
+- Experiments (use with caution):
+  ┬╖ proxyTimeout: 300000
+
+  Creating an optimized production build ...

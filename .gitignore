@@ -1,0 +1,72 @@
+# Security
+.env
+.env.local
+.env.production
+.env.development
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+venv/
+env/
+
+# Node
+node_modules/
+.next/
+out/
+build/
+
+# System
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+
+# Local Data
+*.db
+*.sqlite
+
+# Security
+!package.json
+!composer.json
+!tsconfig.json
+!next.config.json
+!jsconfig.json
+!package-lock.json
+!firebase.json
+
+# Ignore specific service account key
+prepwise-638a9-firebase-adminsdk-fbsvc-94f37c1f27.json
+
+# Deployment / K8s
+k8s/
+
+# Temporary / Logs
+tmp/
+errors.txt
+
+# Internal Documentation
+guidelines.md
+implementation_plan.md
+task.md
+walkthrough.md
+
+
+# Local-only files (user uploads, recordings, scratch work, logs)
+backend/uploads/
+backend/scratch/
+scratch/
+venv_old_broken/
+reference files/
+*.log
+ngrok_logs.txt
+backend/debug_log.txt
+backend/ollama_list.txt
+backend/test_audio.webm
+backend/refactor_script.py
+frontend/lint-error.txt
+test_cache.ts

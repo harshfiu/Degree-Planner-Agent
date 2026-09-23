@@ -1,0 +1,113 @@
+services:
+  # PostgreSQL Database
+  db:
+    image: postgres:16-alpine
+    container_name: degree_planner_db
+    environment:
+      POSTGRES_DB: degree_planner
+      POSTGRES_USER: planner
+      POSTGRES_PASSWORD: plannerdev
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U planner -d degree_planner" ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  # Redis Cache
+  redis:
+    image: redis:7-alpine
+    container_name: degree_planner_redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    command: redis-server --save 60 1 --loglevel warning
+
+  # Database GUI (Adminer)
+  adminer:
+    image: adminer
+    container_name: degree_planner_adminer
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+
+  # FastAPI Backend
+  backend:
+    build: ./backend
+    container_name: degree_planner_backend
+    ports:
+      - "8000:8000"
+    environment:
+      DATABASE_URL: postgresql://planner:plannerdev@db:5432/degree_planner
+
+      CORS_ORIGINS: '["*"]'
+      DEBUG: "true"
+      REDIS_URL: "redis://redis:6379"
+      OLLAMA_BASE_URL: "http://host.docker.internal:11434"
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_started
+    volumes:
+      - ./backend:/app
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+
+  # Next.js Frontend
+  frontend:
+    build:
+      context: ./frontend
+      args:
+        NEXT_PUBLIC_VAPI_WEB_TOKEN: 40559987-a6c0-4160-bd90-7cf727686d5b
+        NEXT_PUBLIC_VAPI_WORKFLOW_ID: 5679977c-8cb2-46d2-abe8-ecb1d43bd2b3
+        NEXT_PUBLIC_API_URL: /api/backend
+    container_name: degree_planner_frontend
+    ports:
+      - "3000:3000"
+    environment:
+      # Relative URL: browser calls /api/backend/... which Next.js proxies to the backend container
+      # This makes the app work for ANY device anywhere in the world via Ngrok
+      NEXT_PUBLIC_API_URL: /api/backend
+      OLLAMA_BASE_URL: http://host.docker.internal:11434
+      BACKEND_INTERNAL_URL: http://backend:8000
+      GOOGLE_APPLICATION_CREDENTIALS: /app/firebase-credentials.json
+      NEXT_PUBLIC_VAPI_WEB_TOKEN: 40559987-a6c0-4160-bd90-7cf727686d5b
+      NEXT_PUBLIC_VAPI_WORKFLOW_ID: 5679977c-8cb2-46d2-abe8-ecb1d43bd2b3
+    volumes:
+      - ./prepwise-638a9-firebase-adminsdk-fbsvc-94f37c1f27.json:/app/firebase-credentials.json
+    depends_on:
+      - backend
+
+  # Developer Options Panel
+  dev-panel:
+    image: node:20-alpine
+    container_name: degree_planner_dev_panel
+    working_dir: /panel
+    ports:
+      - "3001:3001"
+    volumes:
+      - ./developer-panel:/panel
+    command: node server.js
+    depends_on:
+      - backend
+
+  # Ngrok Secure Tunnel
+  ngrok:
+    image: ngrok/ngrok:latest
+    container_name: degree_planner_ngrok
+    environment:
+      NGROK_AUTHTOKEN: ${NGROK_AUTHTOKEN:-""}
+    command: "http frontend:3000 --log stdout"
+    ports:
+      - "4040:4040"
+    depends_on:
+      - frontend
+
+volumes:
+  postgres_data:
+  redis_data:
