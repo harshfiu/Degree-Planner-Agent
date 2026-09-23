@@ -937,6 +937,6 @@ This software is provided for educational purposes. It is not a substitute for p
 
 ---
 
-**Maintained by [Harsh Gupta](https://github.com/harshfiu)** · Originally created by Akshat Awasthi
+**Maintained by [Harsh Gupta](https://github.com/harshfiu)**
 
 For questions or issues, please open a GitHub issue.

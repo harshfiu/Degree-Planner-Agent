@@ -108,7 +108,7 @@ export default function AboutPage() {
                         <p className="text-purple-400 font-medium tracking-wide uppercase text-sm mb-8">Project Maintainer</p>
 
                         <p className="max-w-2xl mx-auto text-zinc-400 text-lg leading-relaxed mb-10">
-                            DegreePlanner is currently maintained by Harsh Gupta. The project was originally created by Akshat Awasthi.
+                            DegreePlanner is built and maintained by Harsh Gupta.
                         </p>
 
                         <div className="flex flex-wrap justify-center gap-4">

@@ -39,3 +39,10 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# tool output — these capture absolute paths from whichever machine ran them
+lint_output.txt
+lint_errors.txt
+eslint.txt
+tsc_errors*.txt
+build_output.txt

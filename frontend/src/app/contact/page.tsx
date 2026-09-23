@@ -120,7 +120,7 @@ export default function ContactPage() {
                                 </div>
                                 <div className="space-y-2">
                                     <label className="text-xs font-bold text-zinc-400 ml-1">Last Name</label>
-                                    <Input placeholder="Awasthi" className="bg-white/5 border-white/10 focus:border-teal-500/50 rounded-xl h-12 text-white placeholder:text-zinc-600" />
+                                    <Input placeholder="Your last name" className="bg-white/5 border-white/10 focus:border-teal-500/50 rounded-xl h-12 text-white placeholder:text-zinc-600" />
                                 </div>
                             </div>
 
